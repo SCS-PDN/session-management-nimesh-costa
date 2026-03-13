@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, <span id="username">User</span>!</h1>
+    
+    <form action="LogoutServlet" method="GET">
+        <input type="submit" value="Logout">
+    </form>
+    
+    <hr>
+
+    <h2>Available Courses</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Course ID</th>
+                <th>Course Name</th>
+                <th>Instructor</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="availableCoursesTable"></tbody>
+    </table>
+
+    <h2>Your Enrolled Courses</h2>
+    <ul id="enrolledCoursesList"></ul>
+
+    <script>
+        fetch('DashboardServlet')
+            .then(response => {
+                // If the Servlet sends a redirect (because session is null), follow it
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('username').textContent = data.user;
+                
+                const tableBody = document.getElementById('availableCoursesTable');
+                data.available.forEach(course => {
+                    tableBody.innerHTML += `<tr>
+                        <td>${course.id}</td>
+                        <td>${course.name}</td>
+                        <td>${course.instructor}</td>
+                        <td><a href="EnrollServlet?courseId=${course.id}">Enroll</a></td>
+                    </tr>`;
+                });
+
+                const list = document.getElementById('enrolledCoursesList');
+                if (data.enrolled.length === 0) {
+                    list.innerHTML = "<li>No courses enrolled yet.</li>";
+                } else {
+                    data.enrolled.forEach(c => {
+                        list.innerHTML += <li>${c.name} (${c.id})</li>;
+                    });
+                }
+            })
+            .catch(err => console.log("Session likely expired or not logged in."));
+    </script>
+</body>
+</html>
