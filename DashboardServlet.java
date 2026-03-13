@@ -1,6 +1,5 @@
 package lk.ac.pdn;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -16,17 +15,16 @@ import javax.servlet.http.HttpSession;
 public class DashboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect("login.html");
+            response.sendRedirect("index.html");
             return;
         }
 
         String username = (String) session.getAttribute("user");
         List<Course> enrolled = (List<Course>) session.getAttribute("enrolledCourses");
 
-        
         List<Course> availableCourses = new ArrayList<>();
         availableCourses.add(new Course("CSC3103", "Server Side Web Programming", "Dr. Aris"));
         availableCourses.add(new Course("CSC3104", "Database Management", "Prof. Sarah"));
@@ -35,8 +33,7 @@ public class DashboardServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        
-        out.println("<html><head><title>Course Dashboard</title></head><body>");
+        out.println("<html><head><title>Dashboard</title></head><body>");
         out.println("<h1>Welcome, " + username + "!</h1>");
         out.println("<a href='LogoutServlet'>Logout</a>");
 
@@ -49,7 +46,7 @@ public class DashboardServlet extends HttpServlet {
         out.println("</table>");
 
         out.println("<h2>Your Enrolled Courses</h2><ul>");
-        if (enrolled != null) {
+        if (enrolled != null && !enrolled.isEmpty()) {
             for (Course c : enrolled) {
                 out.println("<li>" + c.getCourseName() + " (" + c.getCourseId() + ")</li>");
             }

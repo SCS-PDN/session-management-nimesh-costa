@@ -13,18 +13,15 @@ import javax.servlet.http.HttpSession;
 public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+        if (session != null) session.invalidate();
 
         Cookie killCookie = new Cookie("username", "");
         killCookie.setMaxAge(0);
-        killCookie.setPath(request.getContextPath()); 
+        killCookie.setPath(request.getContextPath());
         response.addCookie(killCookie);
 
-       
         response.sendRedirect(request.getContextPath() + "/index.html");
     }
 }

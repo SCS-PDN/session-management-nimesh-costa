@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 public class EnrollServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
+
         String courseId = request.getParameter("courseId");
         HttpSession session = request.getSession(false);
 
@@ -24,13 +24,13 @@ public class EnrollServlet extends HttpServlet {
                 enrolled = new ArrayList<>();
             }
 
-            // ADDED: Logic to map ID to a Course object
+            // Map ID to course
             Course selected = null;
-            if (courseId.equals("CSC3103")) selected = new Course("CSC3103", "Server Side Web Programming", "Dr. Jone");
-            else if (courseId.equals("CSC2012")) selected = new Course("CSC 2012", "Database Management", "Prof. Sam");
-            else if (courseId.equals("CSC2112")) selected = new Course("CSC2112", "Networking", "Dr. Same");
+            if ("CSC3103".equals(courseId)) selected = new Course("CSC3103", "Server Side Web Programming", "Dr. Aris");
+            else if ("CSC3104".equals(courseId)) selected = new Course("CSC3104", "Database Management", "Prof. Sarah");
+            else if ("CSC3105".equals(courseId)) selected = new Course("CSC3105", "Network Security", "Dr. Lee");
 
-            // Prevent duplicates
+            // Add only if not already enrolled
             boolean exists = false;
             if (selected != null) {
                 for (Course c : enrolled) {
